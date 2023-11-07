@@ -63,3 +63,40 @@ Solid is a way to write good code. It is sort of guidance points.
             public class Duck extends FlyingBirds{}
             public class Ostrich extends Bird{} 
             ```
+- **Interface Segregation Principle**
+    - Clients should not be force to depend upon interfaces that they don't use
+    - Interface pollution:
+        - Large Interfaces
+        - Unrelated Methods
+    - Examples:
+    ```
+    Classes with empty method implementations.
+    Methods with UnsupportedOperationException.
+    Method implementation with nulls or dummy values.
+    ```
+
+- **Dependency Inversion Principle**
+    - High level module SHOULD NOT depend on low level module
+        - High level module - provides business rule
+        - Low level module - functuanality so low level that can be used anywhere (like write on disk)
+        - Don't make tightly couples
+    - It should depend on Abstraction
+        - **Instead** of using **New instance of FileWriter** we can create an **interface** and let the high level to use this **interface**
+    - Example:
+    ```
+    Instead of
+    writeMessage(Message message) {
+        FileWriter writer = new FileWriter();
+        writer.writeMessage(message);
+    }
+
+    Use:
+    writeMessage(Message message, Writer writer) {
+        writer.writeMessage(message);
+    }
+    ```
+
+### Deisgn Patterns
+- **Creational** - deal with the process of creation objects of classes.
+- **Structural** - how we create or compose objects (add another object to an object and have a composition). How to arrange classes and objects so we can derive functionality from them.
+- **Behavioral** - how classes and objects interact and communicate with each other. So we can derrive the functionality.
