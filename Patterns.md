@@ -8,4 +8,4 @@ One of the resons to have builder pattern is for immutable classes. This is usua
 **What is a builder?**
 - If we have a complex process of creating an object with multiple steps
 - In builder the logic of construction is removed from client code and abstracted in separate classes
-- UML 
+- [UML](/Files/Builder.png)
