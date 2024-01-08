@@ -8,7 +8,7 @@
 - Simply move instatiation logic to a separate class and most commonly to a static method of this class
 - Considered not to be real design pattern
 - Learned as a destinction from Factory Method design pattern
-- [UML](/Files/SimpleFactory.png)
+![UML](/Files/SimpleFactory.png)
 
 **Implement a factory**
 - An interface of the class

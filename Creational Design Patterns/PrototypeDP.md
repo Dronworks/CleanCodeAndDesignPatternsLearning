@@ -6,7 +6,7 @@ If the object that we are creating can take time to create and we need to create
 **What is a builder?**
 - If we have a complex process of creating an object with multiple steps
 - In builder the logic of construction is removed from client code and abstracted in separate classes
-- [UML](/Files/Builder.png)
+![UML](/Files/PrototypeDP.png)
 
 **Implement a builder**
 - Identify the parts of the product
