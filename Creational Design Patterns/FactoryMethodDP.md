@@ -17,11 +17,11 @@
 **Down side of this Pattern**
 - We will have to add more classes in order to create new types of interface object, hence more unit tests
 
-#### Examples:
+**Examples:**
 - One example is the java.util.Collecton, a function called **iterator()**
-- Here is an example:
+- Local example:
     - Create a Message -> once in Text format and once in JSON format
-    - [UML](/Files/FactoryMethodExample.png)
+    ![UML](/Files/FactoryMethodExmple.png)
     - This is the Product (Message in our case)
     ```
     public abstract class Message {

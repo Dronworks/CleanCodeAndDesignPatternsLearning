@@ -16,5 +16,5 @@
 - A simple factory class with a static function that returns the object (it may recieve additional arguments to use in instantiation)
 - A client that calls the factory with a simple parameter
 
-#### Examples:
+**Examples:**
 - **java.text.NumberFormat** has a getInstance method that is an example

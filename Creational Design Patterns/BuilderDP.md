@@ -32,7 +32,8 @@ private static UserDTO directBuild(UserDTOBuilder builder, User user) {
 - In the building class, there is no need to a specific constructor and it will use setters
 - Also we need to have a static method to get the Builder
 `public static SomeBuilder getBuilder() { return new SomeBuilder() }`
-#### Examples:
+
+**Examples:**
 - **Calendar** is a good example of a builder - you can use some of its functions (like setWeekDate) and the builder will add locale and etc...
 - **StringBuilder** - is a bad eample, althogh it works like a builder it doesn't follow the builder pattern [Link](https://stackoverflow.com/questions/5238007/stringbuilder-and-builder-pattern)
 #### Nice example for builder:
