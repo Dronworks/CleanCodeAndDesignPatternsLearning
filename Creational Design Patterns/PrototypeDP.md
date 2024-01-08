@@ -19,3 +19,4 @@ If the object that we are creating can take time to create and we need to create
   - A **GameUnit** prototype
   - A **Swordsman** that implements clone
   - A **General** that doesn't implement clone
+  ![UML](/Files/PrototypeEmaple.png)
