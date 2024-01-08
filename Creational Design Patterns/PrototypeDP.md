@@ -1,16 +1,12 @@
-### Builder Design Pattern
+### Prototype Design Pattern
 **Why?**
-#### Creating an immutable class
-One of the resons to have builder pattern is for immutable classes. This is usually solved by a constructor, but then it has to have many parameters, and if it is a library it is very hard to know what are the parameters.
-#### A class that depends on different classes
-`public User(String name, Address address, List<Role> roles)` - in this case Address and Roles need to be created befor the User.
-#### A class with large constructors 
-A class that have multiple fields and a constructor will have many arguments
+#### Creating multiple times an object that is costly to create
+If the object that we are creating can take time to create and we need to create such object more than once
 
 **What is a builder?**
 - If we have a complex process of creating an object with multiple steps
 - In builder the logic of construction is removed from client code and abstracted in separate classes
-![UML](/Files/Builder.png)
+- [UML](/Files/Builder.png)
 
 **Implement a builder**
 - Identify the parts of the product
