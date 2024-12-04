@@ -20,8 +20,9 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
 ![UML](/Files/AbstractFactoryDP.png)
 
 **Implement a factory**
-- Create a class for the creator (it can be concrete if provided a default object or abstract)
-- Implementations will override the method and return an object
+- Create AbstractProductA and 2 implementations ProductAOpt1 and ProductAOpt2
+- Create AbstractProductB and 2 implementations ProductBOpt1 and ProductBOpt2
+- Create Abstract
 - Also there is a possibility to provide to the function a simple parameter to select what message to build
 
 **Down side of this Pattern**
