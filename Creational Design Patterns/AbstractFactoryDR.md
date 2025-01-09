@@ -18,6 +18,7 @@ Now you progress to industrial age:
 Your class will ask for a naval unit, and the Factory will decide what age is it and build the unit accordingly, and return the class to you.
 
 ![UML](/Files/AbstractFactoryDP.png)
+![UML2](/Files/AbstractFactoryDP2.png)
 
 **Implement a factory**
 - Create AbstractProductA and 2 implementations ProductAOpt1 and ProductAOpt2
