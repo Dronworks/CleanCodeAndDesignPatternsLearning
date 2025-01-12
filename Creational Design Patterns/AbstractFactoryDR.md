@@ -26,10 +26,17 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
 - Create Abstract factory that defines abstract methods for creating the products
 - Provide concrete implementation of factory for each set of products
 
-    **NOTE:** abstract factory uses factory method pattern (it is like an object with multiple factory methods)
+    **NOTE:** abstract factory uses [factory method](https://github.com/Dronworks/CleanCodeAndDesignPatternsLearning/blob/main/Creational%20Design%20Patterns/FactoryMethodDP.md) pattern (it is like an object with multiple factory methods)
 
-**Down side of this Pattern**
-- We will have to add more classes in order to create new types of interface object, hence more unit tests
+**Implementation considerations**
+- Factory can be implemented as singelton (we will need only one instance of each factory)
+- Adding new product requires changes to the base factory (and implementations)
+- We **provide** the client code with concrete factory so that it can create objects
+
+**Design considerations**
+- When we want to constrain object creations - so they work together
+- Abstract factory uses **[factory method DP](https://github.com/Dronworks/CleanCodeAndDesignPatternsLearning/blob/main/Creational%20Design%20Patterns/FactoryMethodDP.md)**
+- If objects are expensive to make, we can transparantly swith factory implementation (and use **[prototype](https://github.com/Dronworks/CleanCodeAndDesignPatternsLearning/blob/main/Creational%20Design%20Patterns/PrototypeDP.md)** DP to create them)
 
 **Examples:**
 - Cloud example:
@@ -196,3 +203,34 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
         }
     }
     ```
+
+- Real examples:
+    - **javax.xml.parsers.DocumentBuilderFactory**.
+    NOTEs:
+        - However this implementation doesn't match 100% with the UML of abstract factory from GoF. The class has a static newInstance() method which returns actual factory class object.
+        - The newInstance() method however uses classpath scanning, system properties, an external property file as ways to find the factory class & creates the factory object. So we can change the factory class being used, even if this is a static method.
+        - **DocumentBuilderFactory** is a **static instance**
+        - **DocumentBuilder** is an **abstract class**
+        - **Document** is an **insterface**
+    ```
+    public class Client {
+
+        public static void main(String[] args) throws Exception {
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            System.out.println("Using factory class: "+factory.getClass());
+
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            System.out.println("Got builder class: "+builder.getClass());
+
+            Document doc = builder.newDocument();
+            System.out.println("Got Document class:"+doc.getClass());
+    }
+    ```
+    ![Example document factory output](/Files/ExampleOutput_DocumentFactory.png)
+    
+    **Note:** we can use different document factory by getting different implementation jars to our **RUNTIME** path.
+
+    ![Different implementation use of document factory](/Files/DifferentDocumentFactoryImpl.png)
+    
+    ![Example document factory output alternative](/Files/ExampleOutputALT_DocumentFactory.png)
