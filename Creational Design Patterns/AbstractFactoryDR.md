@@ -23,104 +23,176 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
 **Implement a factory**
 - Create AbstractProductA and 2 implementations ProductAOpt1 and ProductAOpt2
 - Create AbstractProductB and 2 implementations ProductBOpt1 and ProductBOpt2
-- Create Abstract
-- Also there is a possibility to provide to the function a simple parameter to select what message to build
+- Create Abstract factory that defines abstract methods for creating the products
+- Provide concrete implementation of factory for each set of products
+
+    **NOTE:** abstract factory uses factory method pattern (it is like an object with multiple factory methods)
 
 **Down side of this Pattern**
 - We will have to add more classes in order to create new types of interface object, hence more unit tests
 
 **Examples:**
-- One example is the java.util.Collecton, a function called **iterator()**
-- Local example:
-    - Create a Message -> once in Text format and once in JSON format
-    ![UML](/Files/FactoryMethodExmple.png)
-    - This is the Product (Message in our case)
+- Cloud example:
+    - A support of the code both for Google cloud and AWS cloud:
+        - we need Instance (EC2/GCEI)
+        - we need Storage (S3/GCS)
+        - a factory to create an instance and a storage
+    ![UML](/Files/AbstractFactoryExample.png)
+    - Instance Interface
     ```
-    public abstract class Message {
+    //Represents an abstract product
+    public interface Instance {
+        enum Capacity{micro, small, large}
 
-        public abstract String getContent();
+        void start();
 
-        public void addDefaultHeaders() {
-            //Adds some default headers
-        }
+        void attachStorage(Storage storage);
 
-        public void encrypt() {
-            //# Has some code to encrypt the content
-        }
+        void stop();
+
     }
     ```
-    - This is a Message of type JSON
+    - This is a EC2 instance
     ```
-    public class JSONMessage extends Message {
+    public class Ec2Instance implements Instance {
+
+        public Ec2Instance(Capacity capacity) {
+            //Map capacity to ec2 instance types. Use aws API to provision
+            System.out.println("Created Ec2Instance");
+        }
 
         @Override
-        public String getContent() {
-            return "{\"JSON]\": []}";
+        public void start() {
+            System.out.println("Ec2Instance started");
         }
+        ...
     }
     ```
-    - This is the Message of Text type
+    - This is a GoogleComputeEngine instance
     ```
-    public class TextMessage extends Message {
+    public class GoogleComputeEngineInstance implements Instance {
+
+        public GoogleComputeEngineInstance(Capacity capacity) {
+            //Map capacity to GCP compute instance types. Use GCP API to provision
+            System.out.println("Created Google Compute Engine instance");
+        }
+
         @Override
-        public String getContent() {
-            return "Text";
+        public void start() {
+            System.out.println("Compute engine instance started");
         }
+        ...
     }
     ```
-    - This is the abstract creator, typically it will do more logic on the created message
+    - Storage Interface
     ```
-    package com.coffeepoweredcrew.factorymethod;
-    import com.coffeepoweredcrew.factorymethod.message.Message;
-        
-    / **
-    * This is our abstract "creator".
-    * The abstract method createMessage() has to be implemented by
-    * its subclasses.
-    */
-    public abstract class MessageCreator {
-
-        public Message getMessage() {
-            Message msg = createMessage();
-
-            msg.addDefaultHeaders();
-            msg.encrypt();
-
-            return msg;
-        }
-
-        //Factory method
-        public abstract Message createMessage();
+    public interface Storage {
+        String getId();
     }
     ```
-    - This is the implementation of JSON **Creator**
+    - This is a S3 implementation
     ```
-    public class JSONMessageCreator extends MessageCreator {
+    public class S3Storage implements Storage {
+
+        public S3Storage(int capacityInMib) {
+            //Use aws s3 api
+            System.out.println("Allocated "+capacityInMib+" on S3");
+        }
+
         @Override
-        public Message createMessage() {
-            return new JSONMessage();
+        public String getId() {
+            return "S31";
         }
+        ...
     }
     ```
-    - This is the implementation of Text **Creator**
+    - This is a GoogleCloudStorage implementation
     ```
-    public class TextMessageCreator extends MessageCreator {
+    public class GoogleCloudStorage implements Storage {
+
+        public GoogleCloudStorage(int capacityInMib) {
+            //Use gcp api
+            System.out.println("Allocated "+capacityInMib+" on Google Cloud Storage");
+        }
+
         @Override
-        public Message createMessage() {
-            return new TextMessage();
+        public String getId() {
+            return "gcpcs1";
         }
+        ...
     }
     ```
-    - Example of usage with Main
+    - Resource factory interface
+    ```
+    public interface ResourceFactory {
+
+        Instance createInstance(Instance.Capacity capacity);
+
+        Storage createStorage(int capMib);
+
+    }
+    ```
+    - This is the AWS resource factory implementation
+    ```
+    public class AwsResourceFactory implements ResourceFactory {
+
+        @Override
+        public Instance createInstance(Capacity capacity) {
+            return new Ec2Instance(capacity);
+        }
+
+        @Override
+        public Storage createStorage(int capMib) {
+            return new S3Storage(capMib);
+        }
+
+    }
+    ```
+    - This is the Google resource factory implementation
+    ```
+    public class GoogleResourceFactory implements ResourceFactory {
+
+        @Override
+        public Instance createInstance(Capacity capacity) {
+            return new GoogleComputeEngineInstance(capacity);
+
+        }
+
+        @Override
+        public Storage createStorage(int capMib) {
+            return new GoogleCloudStorage(capMib);
+        }
+
+    }
+    ```
+    - **Usage** Client class
     ```
     public class Client {
-        public static void main(String[] args) {
-            printMessage(new JSONMessageCreator());
+
+        private ResourceFactory factory;
+
+        public Client(ResourceFactory factory) {
+            this. factory = factory;
         }
 
-        public static void printMessage(MessageCreator creator) {
-            Message msg = creator. getMessage();
-            System.out.println(msg);
+        public Instance createServer(Instance.Capacity cap, int storageMib) {
+            Instance instance = factory.createInstance(cap);
+            Storage storage = factory.createStorage(storageMib);
+            instance.attachStorage(storage);
+            return instance;
+        }
+
+        public static void main(String[] args) {
+            Client aws = new Client(new AwsResourceFactory());
+            Instance il = aws.createServer(Capacity.micro, 20480);
+            il.start();
+            i1.stop();
+
+            System.out.println("****");
+            Client gcp = new Client(new GoogleResourceFactory());
+            i1 = gpc.createServer(Capacity.micro, 20480);
+            i1.start();
+            i1.stop();
         }
     }
     ```
