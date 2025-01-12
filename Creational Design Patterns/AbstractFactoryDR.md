@@ -38,6 +38,16 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
 - Abstract factory uses **[factory method DP](https://github.com/Dronworks/CleanCodeAndDesignPatternsLearning/blob/main/Creational%20Design%20Patterns/FactoryMethodDP.md)**
 - If objects are expensive to make, we can transparantly swith factory implementation (and use **[prototype](https://github.com/Dronworks/CleanCodeAndDesignPatternsLearning/blob/main/Creational%20Design%20Patterns/PrototypeDP.md)** DP to create them)
 
+**Abstract Factory VS Factory Method**
+- **AF** - Hides factories as well as concrete objects used from the client code. **| FM** - Hides the concrete objects which are used from the client code.
+**AF** - Suitable when multiple objects are designed to work together & client must use products from single family at a time. **| FM** - Concerned with one product & it's subclasses. Collaboration of product itself with other objects is irrelevant.
+
+**Pitfalls**
+- A lot more complex to implement than factory method.
+- Adding a new product requires changes to base factory as well as ALL implementations of factory.
+- Difficult to visualize the need at start of development and usually starts out as a factory method.
+- Abstract factory design pattern is very specific to the problem of "product families".
+
 **Examples:**
 - Cloud example:
     - A support of the code both for Google cloud and AWS cloud:
@@ -232,5 +242,5 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     **Note:** we can use different document factory by getting different implementation jars to our **RUNTIME** path.
 
     ![Different implementation use of document factory](/Files/DifferentDocumentFactoryImpl.png)
-    
+
     ![Example document factory output alternative](/Files/ExampleOutputALT_DocumentFactory.png)
