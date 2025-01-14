@@ -42,6 +42,29 @@ public class EagerRegistry {
 ```
 - Lazy Singleton
 
+**Notes:**
+
+1. **volatile** - makes it impossible to use cache
+2. **synchronized** - makes the code be singlethreaded
+```
+public class LazyRegistryWithDCL {
+
+    private LazyRegistryWithDCL() {}
+
+    private static volatile LazyRegistryWithDCL INSTANCE;
+
+    public static LazyRegistryWithDCL getInstance() {
+        if(INSTANCE == null) {
+            synchronized (LazyRegistryWithDCL.class) {
+                if(INSTANCE == null) {
+                    INSTANCE = new LazyRegistryWithDCL();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+}
+```
 - Usage
 ```
 public class Client {
