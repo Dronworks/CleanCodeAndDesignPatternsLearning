@@ -65,6 +65,21 @@ public class LazyRegistryWithDCL {
     }
 }
 ```
+- Lazy Singleton via Holder. To avoid syncronize and **if** inside **if**
+```
+public class LazyRegistryIODH {
+
+    private LazyRegistryIODH() {}
+
+    private static class RegistryHolder {
+        static LazyRegistryIODH INSTANACE = new LazyRegistryIODH();
+    }
+
+    public static LazyRegistryIODH getInstance () {
+        return RegistryHolder. INSTANACE;
+    }
+}
+```
 - Usage
 ```
 public class Client {
