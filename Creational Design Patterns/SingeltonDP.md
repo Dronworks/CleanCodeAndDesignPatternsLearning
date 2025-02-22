@@ -80,9 +80,13 @@ public class LazyRegistryIODH {
     }
 }
 ```
-- Singleton as an Enum
-
-
+- Singleton as an Enum - The only usage is that it is good for serialization.
+```
+public Enum RegistryEnum {
+    INSTANCE;
+    public void getConfiguration() {}
+}
+```
 - Usage
 ```
 public class Client {
