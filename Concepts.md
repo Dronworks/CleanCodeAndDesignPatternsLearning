@@ -98,5 +98,7 @@ Solid is a way to write good code. It is sort of guidance points.
 
 ### Deisgn Patterns
 - **Creational** - deal with the process of creation objects of classes.
-- **Structural** - how we create or compose objects (add another object to an object and have a composition). How to arrange classes and objects so we can derive functionality from them.
+- **Structural** - 
+  - how we create or compose objects (add another object to an object and have a composition). How to arrange classes and objects so we can derive functionality from them.
+  - How classes and objects are arranged or composed.
 - **Behavioral** - how classes and objects interact and communicate with each other. So we can derrive the functionality.
