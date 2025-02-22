@@ -80,6 +80,9 @@ public class LazyRegistryIODH {
     }
 }
 ```
+- Singleton as an Enum
+
+
 - Usage
 ```
 public class Client {
