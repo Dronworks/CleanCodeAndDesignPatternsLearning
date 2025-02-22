@@ -23,8 +23,24 @@
     - **Lazy initialization** - Lazy Singleton
         - Singleton is created when it is first required
 
-**Down side of this Pattern**
-- xxx
+ **Design Considerations**
+ - Singleton doesn't need any parameters. If you need to support for constructor arguments, use simple factory or factory method.
+ - Singleton should not carry mutable global state!
+
+ **Singleton vs Factory Method**
+
+Singleton
+- Primary purpose or intent of singleton pattern is to ensure that only one instance of a class is ever created
+- Singleton instance is created without any need of arguments from client code.
+
+Factory Method
+- Factory method is primarily used to isolate client code from object creation & delegate object creation to subclasses.
+- Factory method allows to parameterize the object creation.
+
+**Pitfalls**
+- Hard to unit test as it hard to mock it.
+ - Most common way of implementing is *per* CLASS LOADER and not per JVM so in a web app we may have 2 or more of same singleton.
+ - Singleton shoud not have mutuble(changalbe) global states as it can be accessed through many places in code and it will have inconsistent behaviour.  Also this way it just become global variable. **Singleton** is best used as CONFIG, LOG, etc...
 
 **Examples:**
 - Eager Singleton
@@ -80,7 +96,7 @@ public class LazyRegistryIODH {
     }
 }
 ```
-- Singleton as an Enum - The only usage is that it is good for serialization.
+- Singleton as an Enum - The only usage is that it is good for serialization. Its an antipattern.
 ```
 public Enum RegistryEnum {
     INSTANCE;
@@ -98,3 +114,6 @@ public class Client {
     }
 }
 ```
+
+**Existing examples**
+- java.lang.Runtime returns all the time same Runtime()
