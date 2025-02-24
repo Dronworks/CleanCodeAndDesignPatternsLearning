@@ -56,7 +56,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
 ![UML](/Files/ClassAdapter.png)
 
     **Employee**
-    ```
+    ```java
     public class Employee {
         private String fullName;
         private String jobTitle;
@@ -66,7 +66,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
     }
     ```
     **Business Card Designer**
-    ```
+    ```java
     / **
     * Client code which requires Customer interface.
     */
@@ -81,7 +81,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
     }
     ```
     **Customer Interface**
-    ```
+    ```java
     public interface Customer {
         String getName();
         String getDesignation();
@@ -89,7 +89,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
     }
     ```
     **Employee Class Adapter**
-    ```
+    ```java
     public class EmployeeClassAdapter extends Employee implements Customer{
 
         @Override
@@ -109,7 +109,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
     }
     ```
     **Main**
-    ```
+    ```java
     public class Main {
 
         public static void main(String[] args) {
@@ -141,7 +141,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
 ![UML](/Files/ObjectAdapter.png)
     
     **Employee Object Adapter**
-    ```
+    ```java
     public class EmployeeObjectAdapter implements Customer{
 
         private Employee adaptee;
@@ -172,7 +172,7 @@ Summary: As long as we keep true to the purpose of simple interface translation 
 **Existing examples**
 - The java.io.InputStreamReader and java.io.OutputStreamWriter classes are examples of object adapters.
 - These classes adapt existing InputStream/OutputStream object to a Reader/Writer interface.
-```
+```java
 public class InputStreamReader extends Reader {
     private final StreamDecoder sd;
 

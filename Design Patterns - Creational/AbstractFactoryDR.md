@@ -56,7 +56,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
         - a factory to create an instance and a storage
     ![UML](/Files/AbstractFactoryExample.png)
     - Instance Interface
-    ```
+    ```java
     //Represents an abstract product
     public interface Instance {
         enum Capacity{micro, small, large}
@@ -70,7 +70,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - This is a EC2 instance
-    ```
+    ```java
     public class Ec2Instance implements Instance {
 
         public Ec2Instance(Capacity capacity) {
@@ -86,7 +86,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - This is a GoogleComputeEngine instance
-    ```
+    ```java
     public class GoogleComputeEngineInstance implements Instance {
 
         public GoogleComputeEngineInstance(Capacity capacity) {
@@ -102,13 +102,13 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - Storage Interface
-    ```
+    ```java
     public interface Storage {
         String getId();
     }
     ```
     - This is a S3 implementation
-    ```
+    ```java
     public class S3Storage implements Storage {
 
         public S3Storage(int capacityInMib) {
@@ -124,7 +124,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - This is a GoogleCloudStorage implementation
-    ```
+    ```java
     public class GoogleCloudStorage implements Storage {
 
         public GoogleCloudStorage(int capacityInMib) {
@@ -140,7 +140,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - Resource factory interface
-    ```
+    ```java
     public interface ResourceFactory {
 
         Instance createInstance(Instance.Capacity capacity);
@@ -150,7 +150,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - This is the AWS resource factory implementation
-    ```
+    ```java
     public class AwsResourceFactory implements ResourceFactory {
 
         @Override
@@ -166,7 +166,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - This is the Google resource factory implementation
-    ```
+    ```java
     public class GoogleResourceFactory implements ResourceFactory {
 
         @Override
@@ -183,7 +183,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
     }
     ```
     - **Usage** Client class
-    ```
+    ```java
     public class Client {
 
         private ResourceFactory factory;
@@ -222,7 +222,7 @@ Your class will ask for a naval unit, and the Factory will decide what age is it
         - **DocumentBuilderFactory** is a **static instance**
         - **DocumentBuilder** is an **abstract class**
         - **Document** is an **insterface**
-    ```
+    ```java
     public class Client {
 
         public static void main(String[] args) throws Exception {

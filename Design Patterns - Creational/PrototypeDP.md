@@ -32,7 +32,7 @@ If the object that we are creating can take time to create and we need to create
   - A **Swordsman** that implements clone
   - A **General** that doesn't implement clone
   ![UML](/Files/PrototypeEmaple.png)
-  ```
+  ```java
   public abstract class GameUnit implements Cloneable {
     private Point3D position;
 
@@ -69,7 +69,7 @@ If the object that we are creating can take time to create and we need to create
     }
   }
   ```
-  ```
+  ```java
   public class Swordsman extends GameUnit {
 
     private String state = "idle";
@@ -89,7 +89,7 @@ If the object that we are creating can take time to create and we need to create
     }
   }
   ```
-  ```
+  ```java
   public class General extends GameUnit{
 
     private String state = "idle";
@@ -114,7 +114,7 @@ If the object that we are creating can take time to create and we need to create
     }
   }
   ```
-  ```
+  ```java
   public class Client {
 
     public static void main(String[] args) {

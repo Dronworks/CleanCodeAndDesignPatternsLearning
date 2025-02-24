@@ -52,7 +52,7 @@ Prototype
 ![UML](/Files/ObjectPoolDP-Example.png)
 
 **Image interface**
-```
+```java
 import javafx.geometry. Point2D;
 //Represents our abstract reusable
 public interface Image extends Poolable {
@@ -62,7 +62,7 @@ public interface Image extends Poolable {
 }
 ```
 **Bitmap implemnentation**
-```
+```java
 import javafx.geometry. Point2D;
 // Concrete reusable - file name won't be changed
 public class Bitmap implements Image {
@@ -95,13 +95,13 @@ public class Bitmap implements Image {
 }
 ```
 **Pool interface**
-```
+```java
 public interface Poolable {
     void reset();
 }
 ```
 **Object pool class**
-```
+```java
 import java.util.concurrent. BlockingQueue;
 import java.util. concurrent. LinkedBlockingQueue;
 
@@ -136,7 +136,7 @@ public class ObjectPool<T extends Poolable> {
 }
 ```
 **Usage (client)**
-```
+```java
 import javafx.geometry.Point2D;
 
 public class Client {
@@ -159,7 +159,7 @@ public class Client {
 
 **Existing examples**
 - java.util.concurrent.ThreadPoolExecutor - used by **newCachedThreadPooin()** via **Executor**
-```
+```java
 ExecutorService service = Executors.newCachedThreadPool() ;
 
 service.submit(()->System.out.println(Thread.currentThread().getName()));
@@ -171,7 +171,7 @@ service.shutdown() ;|
 - org.apache.commons.dbcp.BasicDataSource - database connection pool
 
 **NOTE:** next example is in pure java but also has a simple usage in springboot.
-```
+```java
 // Construct BasicDataSource
 //typically is bound to JNDI or set as spring bean
 BasicDataSource dataSource = new BasicDataSource();

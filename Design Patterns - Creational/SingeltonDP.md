@@ -44,7 +44,7 @@ Factory Method
 
 **Examples:**
 - Eager Singleton
-```
+```java
 public class EagerRegistry {
 
     private EagerRegistry() {}
@@ -62,7 +62,7 @@ public class EagerRegistry {
 
 1. **volatile** - makes it impossible to use cache
 2. **synchronized** - makes the code be singlethreaded
-```
+```java
 public class LazyRegistryWithDCL {
 
     private LazyRegistryWithDCL() {}
@@ -82,7 +82,7 @@ public class LazyRegistryWithDCL {
 }
 ```
 - Lazy Singleton via Holder. To avoid syncronize and **if** inside **if**
-```
+```java
 public class LazyRegistryIODH {
 
     private LazyRegistryIODH() {}
@@ -97,14 +97,14 @@ public class LazyRegistryIODH {
 }
 ```
 - Singleton as an Enum - The only usage is that it is good for serialization. Its an antipattern.
-```
+```java
 public Enum RegistryEnum {
     INSTANCE;
     public void getConfiguration() {}
 }
 ```
 - Usage
-```
+```java
 public class Client {
 
     public static void main(String[] args) {

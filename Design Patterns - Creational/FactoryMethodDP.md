@@ -23,7 +23,7 @@
     - Create a Message -> once in Text format and once in JSON format
     ![UML](/Files/FactoryMethodExmple.png)
     - This is the Product (Message in our case)
-    ```
+    ```java
     public abstract class Message {
 
         public abstract String getContent();
@@ -38,7 +38,7 @@
     }
     ```
     - This is a Message of type JSON
-    ```
+    ```java
     public class JSONMessage extends Message {
 
         @Override
@@ -48,7 +48,7 @@
     }
     ```
     - This is the Message of Text type
-    ```
+    ```java
     public class TextMessage extends Message {
         @Override
         public String getContent() {
@@ -57,7 +57,7 @@
     }
     ```
     - This is the abstract creator, typically it will do more logic on the created message
-    ```
+    ```java
     package com.coffeepoweredcrew.factorymethod;
     import com.coffeepoweredcrew.factorymethod.message.Message;
         
@@ -82,7 +82,7 @@
     }
     ```
     - This is the implementation of JSON **Creator**
-    ```
+    ```java
     public class JSONMessageCreator extends MessageCreator {
         @Override
         public Message createMessage() {
@@ -91,7 +91,7 @@
     }
     ```
     - This is the implementation of Text **Creator**
-    ```
+    ```java
     public class TextMessageCreator extends MessageCreator {
         @Override
         public Message createMessage() {
@@ -100,7 +100,7 @@
     }
     ```
     - Example of usage with Main
-    ```
+    ```java
     public class Client {
         public static void main(String[] args) {
             printMessage(new JSONMessageCreator());

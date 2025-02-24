@@ -18,7 +18,7 @@ A class that have multiple fields and a constructor will have many arguments
 - Provide method to assemble the product
 - Provide a way/method to get the build product. Also this can be a reference to avoid rebuilding
 - Have a director class (or USUALLY a part of a class) that can do all the steps to build the product (usually the class that use this object)
-```
+```java
 private static UserDTO directBuild(UserDTOBuilder builder, User user) {
     return builder.withFirstName(user.getFirstName).
     //
@@ -37,7 +37,7 @@ private static UserDTO directBuild(UserDTOBuilder builder, User user) {
 - **Calendar** is a good example of a builder - you can use some of its functions (like setWeekDate) and the builder will add locale and etc...
 - **StringBuilder** - is a bad eample, althogh it works like a builder it doesn't follow the builder pattern [Link](https://stackoverflow.com/questions/5238007/stringbuilder-and-builder-pattern)
 #### Nice example for builder:
-```
+```java
 interface ArticleBuilder {
   void addTitle(String title);
   void addParagraph(String paragraph);
