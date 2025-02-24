@@ -1,20 +1,39 @@
 ### xxx Design Pattern
 **Why?**
 #### xxx
+
+
+**What is an xxx?**
 - xxx
 
-**What is a xxx?**
-- xxx
-![UML](/Files/xxx.png)
+![UML](/Files/.png)
+
 
 **Implement a xxx**
 - xxx
 
-**Down side of this Pattern**
+ **Implementation Considerations**
+- xxx
+
+**Design Considerations**
+- xxx
+
+**xxx vs yyy DP**
+
+xxx
+
+- xxx
+
+yyy
+
+- yyy
+
+**Pitfalls**
 - xxx
 
 **Examples:**
 - xxx
+
 
 **Existing examples**
 - xxx
