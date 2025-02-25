@@ -1,24 +1,24 @@
-### xxx Design Pattern
+## xxx Design Pattern
 **Why?**
-#### xxx
-
-
-**What is an xxx?**
+### xxx
 - xxx
 
-![UML](/Files/.png)
-
-
-**Implement a xxx**
+### What is an xxx?
 - xxx
 
- **Implementation Considerations**
+![UML](/Files/xxx.png)
+
+
+### Implement a xxx
+- 
+
+### Implementation Considerations
 - xxx
 
-**Design Considerations**
+### Design Considerations
 - xxx
 
-**xxx vs yyy DP**
+### xxx vs yyy DP
 
 xxx
 
@@ -28,12 +28,16 @@ yyy
 
 - yyy
 
-**Pitfalls**
+### Pitfalls
 - xxx
 
-**Examples:**
+### Examples:
 - xxx
 
+![UML](/Files/xxx.png)
 
-**Existing examples**
+
+### Existing examples
 - xxx
+
+![IOExample](/Files/xxx.png)
