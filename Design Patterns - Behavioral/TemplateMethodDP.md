@@ -12,10 +12,10 @@
 ![UML](/Files/TemplateMethodDPUML.png)
 
 
-### Implement a Strategy
-- We start by defining strategy interface which is used by our main/context class. Context class provides strategy with all the data that it needs.
-- We provide implementations for various algorithms by implementing strategy interface a class per algorithm.
-- Our context class provides a way to configure it with one of the strategy implementations. Client code will create context with one of the strategy object.
+### Implement a Template Method
+- Define algorithm in a method with multiple steps and abstract method
+- Don't create too small steps and too many methods, but give enough freedom for implementations
+- Implements abstract methods
 
 ### Implementation Considerations
 - We can implement our context in a way where strategy object is optional. This makes context usable for client codes who do not want to deal with concrete strategy objects.
@@ -42,9 +42,9 @@ State
 - Since client code configures context object with appropriate strategy object, clients know about all implementations of strategy. Introducing new algorithm means changing client code as well.
 
 ### Examples:
-- Print with different algorithms
+- Print with different algorithm implementation
 
-![UML](/Files/PrintAlgorithmStrategy.png)
+![UML](/Files/TemplateMethodDPExample.png)
 
 **Order class**
 ```java
@@ -95,37 +95,71 @@ public class Order {
     }
 }
 ```
-**OrderPrinter class - strategy**
+**OrderPrinter class - template**
 ```java
-package com.coffeepoweredcrew.strategy;
+//Abstract base class defines the template method
+public abstract class OrderPrinter {
 
-import java.util.Collection;
+    public void printOrder (Order order, String filename) throws IOException {
+        try (PrintWriter writer = new PrintWriter(filename)){
+            writer.println(start());
 
-// Strategy
-public interface OrderPrinter {
-	
-	void print(Collection<Order> orders);
+            writer.println(formatOrderNumber(order));
+
+            writer.println(formatItems(order));
+
+            writer.println(formatTotal(order));
+
+            writer.println(end());
+        }
+    }
+
+    protected abstract String start();
+
+    protected abstract String formatOrderNumber(Order order);
+
+    protected abstract String formatItems(Order order);
+
+    protected abstract String formatTotal(Order order);
+
+    protected abstract String end();
 }
 ```
-**Print service - context**
+**Text Printer - extends and implements for text**
 ```java
-package com.coffeepoweredcrew.strategy;
+public class TextPrinter extends OrderPrinter{
 
-
-import java.util.LinkedList;
-
-// Context 
-public class PrintService {
-
-	private OrderPrinter printer;
-	
-    public PrintService(OrderPrinter printer) {
-    	this.printer = printer;
+    @Override
+    protected String start() {
+        return "Order Details";
     }
 
-    public void printOrders(LinkedList<Order> orders) {
-        printer.print(orders);
+    @Override
+    protected String formatOrderNumber (Order order) {
+        return "Order #"+order.getId();
     }
+
+    @Override
+    protected String formatItems(Order order) {
+        StringBuilder builder = new StringBuilder("Items\n------\n");
+
+        for (Map. Entry<String, Double> entry : order.getItems() .entrySet()) {
+            builder.append(entry.getKey()+ " $"+entry.getValue() + "\n");
+        }
+        builder.append("------------");
+        return null;
+    }
+
+    @Override
+    protected String formatTotal(Order order) {
+        return "Total: $"+order.getTotal();
+    }
+
+    @Override
+    protected String end() {
+        return "";
+    }
+
 }
 ```
 **Summary Printer**
