@@ -18,13 +18,12 @@
 - Implements abstract methods
 
 ### Implementation Considerations
-- We can implement our context in a way where strategy object is optional. This makes context usable for client codes who do not want to deal with concrete strategy objects.
-- Strategy objects should be given all data they need as arguments to its method. If number of arguments are high then we can pass strategy an interface reference which it queries for data. Context object can implement this interface and pass itself to strategy.
-- Strategies typically end up being stateless objects making them perfect candidates for sharing between context objects.
+- A balance should be kept on how many steps are we split to. If too many it is overhead, if too low we don't give enough control to subclass
+- Mark the algorithm as final (if needed) so implementations won't change it
 
 ### Design Considerations
-- Strategy implementations can make use of inheritance to factor out common parts of algorithms in base classes making child implementations simpler.
- - Since strategy objects often end up with no state of their own, we can use flyweight pattern to share them between multiple context objects.
+- We can use inheritance subclasses (to override only what we need)
+- Factory method DP often used in TemplateDP
 
 ### Strategy vs State DP
 
@@ -162,160 +161,59 @@ public class TextPrinter extends OrderPrinter{
 
 }
 ```
-**Summary Printer**
+**Html Printer - extends and implements for html**
 ```java
-package com.coffeepoweredcrew.strategy;
-
-import java.util.Collection;
-import java.util.Iterator;
-
-//Concrete strategy
-public class SummaryPrinter implements OrderPrinter{
-
-	@Override
-	public void print(Collection<Order> orders) {
-		System.out.println("*************** Summary Report *************");
-		Iterator<Order> iterator = orders.iterator();
-		double total = 0;
-		for(int i=1; iterator.hasNext(); i++) {
-			Order order = iterator.next();
-			System.out.println(i +". "+order.getId()+ "\t"+order.getDate()+"\t"+order.getItems().size()+"\t"+order.getTotal());
-			total += order.getTotal();
-		}
-		System.out.println("*******************************************");
-		System.out.println("\t\t\t  Total "+total);
-	}
-	
-}
-```
-**Details Printer**
-```java
-package com.coffeepoweredcrew.strategy;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-public class DetailPrinter implements OrderPrinter {
+public class HtmlPrinter extends OrderPrinter {
 
     @Override
-    public void print(Collection<Order> orders) {
-        System.out.println("************* Detail Report ***********");
-        Iterator<Order> iter = orders.iterator();
-        double total = 0;
-        for(int i=1;iter.hasNext();i++) {
-            double orderTotal = 0;
-            Order order = iter.next();
-            System.out.println(i+". "+order.getId()+" \t"+order.getDate());
-            for(Map.Entry<String, Double> entry : order.getItems().entrySet()) {
-                System.out.println("\t\t"+entry.getKey()+"\t"+entry.getValue());
-                orderTotal+=entry.getValue();
-            }
-            System.out.println("----------------------------------------");
-            System.out.println("\t\t Total  "+orderTotal);
-            System.out.println("----------------------------------------");
-            total += orderTotal;
-        }
-        System.out.println("----------------------------------------");
-        System.out.println("\tGrand Total "+total);
+    protected String start() {
+        return "<html><head><title>Order Details</title></head><body>";
     }
-}
-```
-**User**
-```java
-package com.coffeepoweredcrew.strategy;
 
-public class User {
+    @Override
+    protected String formatOrderNumber (Order order) {
+        return "<h1>Order #"+order.getId()+"</h1>";
+    }
+
+    @Override
+    protected String formatItems(Order order) {
+        StringBuilder builder = new StringBuilder("<p><ul>");
+        for (Map. Entry<String, Double> e : order.getItems().entrySet()) {
+            builder.append("<li>"+e.getKey()+" $"+e.getValue()+"</li>");
+        }
+        builder.append("</ul></p>");
+        return builder.toString();
+    }
+
+    @Override
+    protected String formatTotal(Order order) {
+        return "<br/><hr/><h3>Total : $"+order.getTotal()+"</h3>";
+    }
+
+    @Override
+    protected String end() {
+        return "</body></html>";
+    }
 }
 ```
 **Client Main Class**
 ```java
-package com.coffeepoweredcrew.strategy;
-
-import java.util.LinkedList;
-
 public class Client {
 
-    private static LinkedList<Order> orders = new LinkedList<>();
+    public static void main(String[] args) throws IOException {
+        Order order = new Order("1001");
 
-    public static void main(String[] args) {
-        createOrders();
-        //print all orders
-        PrintService service = new PrintService(new DetailPrinter());
-        service.printOrders(orders);
-        
-    }
+        order.addItem("Soda", 2.50);
+        order.addItem("Sandwitch", 11.95);
+        order.addItem("Pizza", 15.95);
 
-    private static void createOrders() {
-        Order o = new Order("100");
-        o.addItem("Soda", 2);
-        o.addItem("Chips", 10);
-        orders.add(o);
-
-        o = new Order("200");
-        o.addItem("Cake", 20);
-        o.addItem("Cookies", 5);
-        orders.add(o);
-
-        o = new Order("300");
-        o.addItem("Burger", 8);
-        o.addItem("Fries", 5);
-        orders.add(o);
+        OrderPrinter printer = new TextPrinter();
+        printer.printOrder(order, "1001. txt") ;
     }
 }
 ```
-
-
 
 ### Existing examples
-- The java.util.Comparator is a great example of strategy pattern. We can create multiple implementations of comparator, each using a different algorithm to perform comparison and supply those to various sort methods.
+- AbstractMap or AbstractSet are classes that are examples, where size needs to be calculated.
 
-```java
-class User {
-    private String name;
-    private int age;
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-}
-```
-```java
-class SortByAge implements Comparator<User> {
-    @Override
-    public int compare(User ol, User o2) {
-        return ol.getAge() - o2.getAge();
-    }
-}
-```
-```java
-class SortByName implements Comparator<User> {
-    @Override
-    public int compare(User o1, User o2) {
-        return o1.getName().compareToIgnoreCase(o2.getName());
-    }
-}
-```
-```java
-List<User> list = new ArrayList<>();
-list.add(new User("Nancy", 16));
-list.add(new User("Dustin", 12));
-list.add(new User("Steve", 17));
-list.add(new User("Mike", 12));
-list.add(new User("Max", 13));
-
-list.sort(new SortByAge());
-
-list.sort(new SortByName());
-```
-
-- Another example of strategy pattern is the ImplicitNamingStrategy & PhysicalNamingStrategy contracts in Hibernate. Implementations of these classes are used when mapping an Entity to database tables. These classes tell hibernate which table to use & which columns to use.
+    ![EXAMPLE](/Files/AbstractSetExample.png)
