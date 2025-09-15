@@ -25,20 +25,23 @@
 - We can use inheritance subclasses (to override only what we need)
 - Factory method DP often used in TemplateDP
 
-### Strategy vs State DP
+### Template Method vs Strategy
+
+Template Method
+
+- All subclasses implement the steps for the exact same algorithm.
+- Client code relies solely on inheritance to get a variation of same algorithm.
 
 Strategy
 
-- We create a class per algorithm.
-- Strategy objects do not need to know about each other.
-
-State
-
-- In state pattern we have a class per state.
-- If states are responsible for triggering state transitions then they have to know about at least next state.
+- In strategy design pattern each subclasses represents a separate algorithm.
+- Client code uses composition principal to configure main class with chosen strategy object.
 
 ### Pitfalls
-- Since client code configures context object with appropriate strategy object, clients know about all implementations of strategy. Introducing new algorithm means changing client code as well.
+- Tracking down what code executed as part of our algorithm requires looking up multiple classes. The
+problem becomes more apparent if subclasses themselves start using inheritance themselves to reuse
+only some of the existing steps & customize a few.
+- Unit testing can become a little more difficult as the individual steps may require some specific state values to be present.
 
 ### Examples:
 - Print with different algorithm implementation
