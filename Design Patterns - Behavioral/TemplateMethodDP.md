@@ -9,7 +9,7 @@
 - A way to store algorithm steps with abstract steps implementation, but with the algorithm order.
 - It is an example of **inversion of control** don't call us we will call you!
 
-![UML](/Files/TemplateMethodDPUML.png)
+![UML](/Files/TemplateMethodDPUml.png)
 
 
 ### Implement a Template Method
@@ -218,5 +218,6 @@ public class Client {
 
 ### Existing examples
 - AbstractMap or AbstractSet are classes that are examples, where size needs to be calculated.
+
 
     ![EXAMPLE](/Files/AbstractSetExample.png)
