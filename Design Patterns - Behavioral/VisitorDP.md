@@ -18,205 +18,293 @@
 - Implement visitor interface with specific functionalities.
 
 ### Implementation Considerations
-- A balance should be kept on how many steps are we split to. If too many it is overhead, if too low we don't give enough control to subclass
-- Mark the algorithm as final (if needed) so implementations won't change it
+- Visitor can work with different classes (who **don't** have a **parent(interface/super)**). BUT the code that passes the Visitor needs to familiar with those classes.
+- Often visitors will need the internal state of visiting classes, so we may need getters, setters.
 
 ### Design Considerations
-- We can use inheritance subclasses (to override only what we need)
-- Factory method DP often used in TemplateDP
+- One effect of this pattern is that related functionality is grouped in a single visitor class instead of spread
+across multiple classes. So adding new functionality is as simple as adding a new visitor class.
+- Visitors can also accumulate state. So along with behavior we can also have state per object in our
+visitor. We don't have to add new state to objects for behavior defined in visitor.
+- Visitor can be used to add new functionality to object structure implemented using composite or can be
+used for doing interpretation in interpreter design pattern.
 
-### Template Method vs Strategy
+### Visitor vs Strategy
 
-Template Method
+Visitor
 
-- All subclasses implement the steps for the exact same algorithm.
-- Client code relies solely on inheritance to get a variation of same algorithm.
+- All visitor subclasses provide possibly different functionalities from each other.
 
 Strategy
 
-- In strategy design pattern each subclasses represents a separate algorithm.
-- Client code uses composition principal to configure main class with chosen strategy object.
+- In strategy design pattern each subclasses represents a separate algorithm to solve the **same** problem.
 
 ### Pitfalls
-- Tracking down what code executed as part of our algorithm requires looking up multiple classes. The
-problem becomes more apparent if subclasses themselves start using inheritance themselves to reuse
-only some of the existing steps & customize a few.
-- Unit testing can become a little more difficult as the individual steps may require some specific state values to be present.
+- Often visitors need access to object's state. So we end up exposing a lot of state through getter methods,
+weakening the encapsulation.
+- Supporting a new class in our visitors requires changes to all visitor implementations.
+- If the classes themselves change then all visitors have to change as well since they have to work with
+changed class.
+- A little bit confusing to understand and implement.
 
 ### Examples:
 - Print with different algorithm implementation
 
 ![UML](/Files/VisitorDPExample.png)
 
-**Order class**
+**Employee class**
 ```java
-package com.coffeepoweredcrew.strategy;
-
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-
-public class Order {
-
-    private String id;
-
-    private LocalDate date;
-
-    private Map<String, Double> items = new HashMap<>();
-
-    private double total;
-
-    public Order(String id) {
-        this.id = id;
-        date = LocalDate.now();
+package com. coffeepoweredcrew.visitor;
+import java.util.Collection;
+public interface Employee {
+    int getPerformanceRating();
+    void setPerformanceRating(int rating);
+    Collection<Employee> getDirectReports ();
+    int getEmployeeId();
+    void accept(Visitor visitor);
+}
+```
+**AbstractEmployee implements Employee**
+```java
+public abstract class AbstractEmployee implements Employee {
+    private int performanceRating;
+    private String name;
+    private static int employeeIdCounter = 101;
+    private int employeeId;
+    
+    public AbstractEmployee (String name) {
+        this. name = name;
+        employeeId = employeeIdCounter++;
+    }
+    
+    public String getName () {
+        return name;
+    }
+    
+    @Override
+    public int getPerformanceRating() {
+        return performanceRating;
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public void setPerformanceRating(int rating) {
+        performanceRating = rating;
     }
 
-    public LocalDate getDate() {
-        return date;
+    @Override
+    public Collection‹Employee> getDirectReports () {
+        return Collections.emptyList();
     }
 
-    public Map<String, Double> getItems() {
-        return items;
-    }
-
-    public void addItem(String name, double price) {
-        items.put(name, price);
-        total+= price;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
+    @Override
+    public int getEmployeeId () {
+        return employeeld;
     }
 }
 ```
-**OrderPrinter class - template**
+**Programmer Employee**
 ```java
-//Abstract base class defines the template method
-public abstract class OrderPrinter {
-
-    public void printOrder (Order order, String filename) throws IOException {
-        try (PrintWriter writer = new PrintWriter(filename)){
-            writer.println(start());
-
-            writer.println(formatOrderNumber(order));
-
-            writer.println(formatItems(order));
-
-            writer.println(formatTotal(order));
-
-            writer.println(end());
-        }
+public class Programmer extends AbstractEmployee {
+    private String skill;
+   
+    public Programmer(String name, String skill) {
+        super (name) ;
+        this.skill = skill;
     }
 
-    protected abstract String start();
-
-    protected abstract String formatOrderNumber(Order order);
-
-    protected abstract String formatItems(Order order);
-
-    protected abstract String formatTotal(Order order);
-
-    protected abstract String end();
-}
-```
-**Text Printer - extends and implements for text**
-```java
-public class TextPrinter extends OrderPrinter{
-
-    @Override
-    protected String start() {
-        return "Order Details";
+    public String getskill() {
+        return skill;
     }
 
     @Override
-    protected String formatOrderNumber (Order order) {
-        return "Order #"+order.getId();
-    }
-
-    @Override
-    protected String formatItems(Order order) {
-        StringBuilder builder = new StringBuilder("Items\n------\n");
-
-        for (Map. Entry<String, Double> entry : order.getItems() .entrySet()) {
-            builder.append(entry.getKey()+ " $"+entry.getValue() + "\n");
-        }
-        builder.append("------------");
-        return null;
-    }
-
-    @Override
-    protected String formatTotal(Order order) {
-        return "Total: $"+order.getTotal();
-    }
-
-    @Override
-    protected String end() {
-        return "";
-    }
-
-}
-```
-**Html Printer - extends and implements for html**
-```java
-public class HtmlPrinter extends OrderPrinter {
-
-    @Override
-    protected String start() {
-        return "<html><head><title>Order Details</title></head><body>";
-    }
-
-    @Override
-    protected String formatOrderNumber (Order order) {
-        return "<h1>Order #"+order.getId()+"</h1>";
-    }
-
-    @Override
-    protected String formatItems(Order order) {
-        StringBuilder builder = new StringBuilder("<p><ul>");
-        for (Map. Entry<String, Double> e : order.getItems().entrySet()) {
-            builder.append("<li>"+e.getKey()+" $"+e.getValue()+"</li>");
-        }
-        builder.append("</ul></p>");
-        return builder.toString();
-    }
-
-    @Override
-    protected String formatTotal(Order order) {
-        return "<br/><hr/><h3>Total : $"+order.getTotal()+"</h3>";
-    }
-
-    @Override
-    protected String end() {
-        return "</body></html>";
+    public void accept(Visitor visitor) {
+        visitor.visit(this);|
     }
 }
 ```
-**Client Main Class**
+**ProjectLead Employee**
+```java
+public class ProjectLead extends AbstractEmployee {
+    
+    private List<Employee> directReports = new ArrayList‹>();
+    
+    public ProjectLead (String name, Employee... employees) {
+        super (name) ;
+        Arrays.stream(employees).forEach(directReports::add);
+    }
+
+    @Override
+    public Collection‹Employee› getDirectReports() {
+        return directReports;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);|
+    }
+}
+```
+**ProjectLead Employee**
+```java
+public class Manager extends AbstractEmployee {
+    
+    private List<Employee> directReports = new ArrayList‹>();
+    
+    public Manager(String name, Employee... employees) {
+        super(name);
+        Arrays.stream(employees).forEach(directReports::add);
+    }
+
+    @Override
+    public Collection‹Employee› getDirectReports() {
+        return directReports;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);|
+    }
+}
+```
+**VicePresident Class**
+```java
+public class VicePresident extends AbstractEmployee {
+    
+    private List<Employee> directReports = new ArrayList‹>();
+
+    public VicePresident(String name, Employee... employees) {
+        super(name);
+        Arrays.stream(employees).forEach(directReports::add);
+    }
+
+    @Override
+    public Collection‹Employee› getDirectReports() {
+        return directReports;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);|
+    }
+}
+```
+**Client Organization Class**
 ```java
 public class Client {
 
-    public static void main(String[] args) throws IOException {
-        Order order = new Order("1001");
+    public static void main (String[] args) {
+        Employee emps = buildOrganization();
+        Visitor visitor = new PrintVisitor();
+        visitOrgStructure(emps, visitor);|
+    }
 
-        order.addItem("Soda", 2.50);
-        order.addItem("Sandwitch", 11.95);
-        order.addItem("Pizza", 15.95);
+    private static Employee buildOrganization() {
+        Programmer p1 = new Programmer ("Rachel", "C++");
+        Programmer p2 = new Programmer ("Andy", "Java");
 
-        OrderPrinter printer = new TextPrinter();
-        printer.printOrder(order, "1001. txt") ;
+        Programmer p3 = new Programmer ("Josh", "C#");
+        Programmer p4 = new Programmer ("Bill", "C++");
+
+        ProjectLead pl1 = new ProjectLead("Tina", p1, p2);
+        ProjectLead pl2 = new ProjectLead ("Joey", p3, p4) ;
+
+        Manager m1 = new Manager ("Chad", pl1);
+        Manager m2 = new Manager ("Chad II", pl2);
+
+        VicePresident vp = new VicePresident("Richard", m1, m2) ;
+        
+        return vp;
+    }
+
+    private static void visitOrgStructure (Employee emp, Visitor visitor) {
+        emp.accept(visitor);
+        emp.getDirectReports().forEach(e -> visitOrgStructure(e, visitor));
+    }
+
+}
+```
+**Visitor interface**
+```java
+public interface Visitor {
+
+    void visit(Programmer programmer); // Can be visitProgrammer, as ve need to implement accept method per class and it call call any "visit" method.
+    void visit(ProjectLead lead);
+    void visit(Manager manager);
+    void visit(VicePresident vp);
+
+}
+```
+**PrintVisitor implementation**
+```java
+public class PrintVisitor implements Visitor{
+    @Override
+    public void visit (Programmer programmer) {
+        String msg = programmer.getName() +" is a " + programmer.getSkill()+" programmer.";
+        System.out.println(msg);
+    }
+
+    @Override
+    public void visit (ProjectLead lead) {
+        String msg = lead.getName () +" is a Project Lead with "+lead.getDirectReports().size() +" programmers reporting. ";
+        System.out.println(msg);
+    }
+    
+    @Override
+    public void visit (Manager manager) {
+        String msg = manager.getName() +" is a Manager with "+manager.getDirectReports().size() +" leads reporting. ";
+        System.out.println(msg) ;
+    }
+    
+    @Override
+    public void visit (VicePresident vp) {
+        String msg = vp.getName() +" is a Vice President with "+vp. getDirectReports).size() +" managers reporting.";
+        System.out.println(msg) ;
     }
 }
 ```
+**ApprisalVisitor implementation**
+```java
+public class AppraisalVisitor implements Visitor{
+    private Ratings ratings = new Ratings ();
+    
+    @SuppressWarnings("serial")
+    public class Ratings extends HashMap‹Integer, PerformanceRating>{
+        public int getFinalRating(int empId) {
+            return get(empId).getFinalRating();
+        }
+    }
 
+    @Override
+    public void visit (Programmer programmer) {
+        PerformanceRating finalRating = new PerformanceRating(programmer.getEmployeeId(), programmer.getPerformanceRating());
+        finalRating.setFinalRating(programmer.getPerformanceRating()) ;
+        ratings.put(programmer.getEmployeeId(), finalRating);
+    }
+
+    @Override
+    public void visit (ProjectLead lead) {
+        //25% team & 75% personal
+        PerformanceRating finalRating = new PerformanceRating(lead.getEmployeeId(), lead.getPerformanceRating());
+        int teamAverage = getTeamAverage(lead);
+        int rating = Math.round(0.75f * lead.getPerformanceRating() + o.25f*teamAverage);
+        finalRating.setFinalRating(rating);
+        finalRating. setTeamAverageRating(teamAverage);
+        ratings.put(lead.getEmployeeId(), finalRating);
+    }
+
+    private int getTeamAverage(Employee emp) {
+        return (int)Math.round(emp.getDirectReports().stream().mapToDouble(e -> e.getPerformanceRating()).average(). getAsDouble());
+    }
+
+    public Ratings getFinalRatings) {
+        return ratings;
+    }
+
+}
+```
 ### Existing examples
-- AbstractMap or AbstractSet are classes that are examples, where size needs to be calculated.
+- The dom4j library used for parsing XML has interface org.dom4j.Visitor & implementation org.dom4j.VisitorSupport
+which are examples of visitor. By implementing this visitor we can process each node in an XML tree.
+- Another example of visitor pattern is the java.nio.file.FileVisitor & its implementation SimpleFileVisitor.
 
-    ![EXAMPLE](/Files/AbstractSetExample.png)
+    ![EXAMPLE](/Files/VisitorFileExample.png)
